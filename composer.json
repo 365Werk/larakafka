@@ -1,7 +1,8 @@
 {
     "name": "werk365/larakafka",
-    "description": ":package_description",
-    "license": "license",
+    "description": "kafka client for laravel",
+    "license": "MIT",
+    "version": "1.0.0-beta2",
     "authors": [
         {
             "name": "author name",
@@ -9,7 +10,7 @@
             "homepage": "author homepage"
         }
     ],
-    "homepage": "https://github.com/werk365/larakafka",
+    "homepage": "https://github.com/Werk365/larakafka",
     "keywords": ["Laravel", "LaraKafka"],
     "require": {
         "illuminate/support": "~7|~8",
