@@ -5,9 +5,9 @@
     "version": "1.0.0-beta2",
     "authors": [
         {
-            "name": "author name",
-            "email": "author email",
-            "homepage": "author homepage"
+            "name": "Hergen Dillema",
+            "email": "h.dillema@365werk.nl",
+            "homepage": "https://365werk.nl"
         }
     ],
     "homepage": "https://github.com/Werk365/larakafka",
