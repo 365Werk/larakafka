@@ -10,6 +10,10 @@ use Jobcloud\Kafka\Exception\KafkaConsumerTimeoutException;
 use Jobcloud\Kafka\Message\KafkaProducerMessage;
 use Jobcloud\Kafka\Producer\KafkaProducerBuilder;
 
+/**
+ * Class LaraKafka
+ * @package Werk365\LaraKafka
+ */
 class LaraKafka
 {
     private $body;
@@ -29,23 +33,32 @@ class LaraKafka
         $this->broker = config('larakafka.broker');
         $this->additionalConfig = config('larakafka.additionalConfig');
     }
+
     private function flatten($value)
     {
-        if(is_array($value)){
+        if (is_array($value)) {
             return json_encode($value);
         }
         return $value;
     }
-    public function setBody($body){
+
+    public function setBody($body)
+    {
         $this->body = $body;
     }
-    public function setKey($key){
+
+    public function setKey($key)
+    {
         $this->key = $key;
     }
-    public function setHeaders($headers){
+
+    public function setHeaders($headers)
+    {
         $this->headers = $headers;
     }
-    public function setTopic($topic){
+
+    public function setTopic($topic)
+    {
         $this->topic = $topic;
     }
 
@@ -71,8 +84,21 @@ class LaraKafka
         return json_encode(["success" => true]);
     }
 
+
+    private function handleMessage($message)
+    {
+        $key = $message->getKey() ?? null;
+        $headers = $message->getHeaders() ?? null;
+        $body = $message->getBody();
+        $function = config("larakafka.consumer.$this->topic.function");
+        $namespace = config("larakafka.consumer.$this->topic.namespace");
+        $nf = $namespace . "::" . $function;
+        $nf($key, $headers, $body);
+    }
+
     public function consume($topic)
     {
+        $this->topic = $topic;
         $consumer = KafkaConsumerBuilder::create()
             ->withAdditionalBroker('pkc-ewzgj.europe-west4.gcp.confluent.cloud:9092')
             ->withAdditionalConfig([
@@ -80,7 +106,7 @@ class LaraKafka
                 'sasl.mechanisms' => 'PLAIN',
                 'sasl.username' => 'NEA5ACNQ6IQACNXQ',
                 'sasl.password' => 'xYaJgSBHR3mPOqesNFL0iWP6lXJe0h7Y/6cpZaIIHgYT+N10Z9Dvs/qsaPR2WzRD',
-                "auto.offset.reset"=> "earliest"
+                "auto.offset.reset" => "earliest"
             ])
             ->withAdditionalSubscription($topic)
             ->build();
@@ -90,12 +116,8 @@ class LaraKafka
             try {
                 $message = $consumer->consume();
                 if ($message) {
-                    Log::info($message->getKey());
-                    Log::info("Headers:" . json_encode($message->getHeaders()));
-                    Log::info($message->getBody());
+                    $this->handleMessage($message);
                 }
-
-                // your business logic
                 $consumer->commit($message);
             } catch (KafkaConsumerTimeoutException $e) {
                 //no messages were read in a given time
