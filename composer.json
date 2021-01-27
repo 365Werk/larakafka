@@ -2,7 +2,7 @@
     "name": "werk365/larakafka",
     "description": "kafka client for laravel",
     "license": "MIT",
-    "version": "1.0.0-beta3",
+    "version": "1.0.0-beta4",
     "authors": [
         {
             "name": "Hergen Dillema",
