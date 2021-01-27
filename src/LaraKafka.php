@@ -45,6 +45,9 @@ class LaraKafka
     public function setHeaders($headers){
         $this->headers = $headers;
     }
+    public function setTopic($topic){
+        $this->topic = $topic;
+    }
 
     public function produce()
     {
