@@ -21,7 +21,6 @@ class LaraKafka
     private $key;
     private $headers;
     private $broker;
-    private $additionalConfig;
 
     public function __construct($body = null)
     {
@@ -31,7 +30,6 @@ class LaraKafka
         $this->topic = config('larakafka.client');
         $this->headers = array_map(array($this, 'flatten'), $caller);
         $this->broker = config('larakafka.broker');
-        $this->additionalConfig = config('larakafka.additionalConfig');
     }
 
     private function flatten($value)
@@ -65,7 +63,7 @@ class LaraKafka
     public function produce()
     {
         $builder = KafkaProducerBuilder::create();
-        $producer = $builder->withAdditionalConfig($this->additionalConfig)
+        $producer = $builder->withAdditionalConfig(config('larakafka.configs.producer'))
             ->withAdditionalBroker($this->broker)
             ->build();
 
@@ -101,13 +99,7 @@ class LaraKafka
         $this->topic = $topic;
         $consumer = KafkaConsumerBuilder::create()
             ->withAdditionalBroker('pkc-ewzgj.europe-west4.gcp.confluent.cloud:9092')
-            ->withAdditionalConfig([
-                'security.protocol' => 'SASL_SSL',
-                'sasl.mechanisms' => 'PLAIN',
-                'sasl.username' => 'NEA5ACNQ6IQACNXQ',
-                'sasl.password' => 'xYaJgSBHR3mPOqesNFL0iWP6lXJe0h7Y/6cpZaIIHgYT+N10Z9Dvs/qsaPR2WzRD',
-                "auto.offset.reset" => "earliest"
-            ])
+            ->withAdditionalConfig(config('larakafka.configs.consumer'))
             ->withAdditionalSubscription($topic)
             ->build();
 
