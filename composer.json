@@ -2,7 +2,7 @@
     "name": "werk365/larakafka",
     "description": "kafka client for laravel",
     "license": "MIT",
-    "version": "1.0.0-beta5",
+    "version": "1.0.0-beta6",
     "authors": [
         {
             "name": "Hergen Dillema",
@@ -14,7 +14,7 @@
     "keywords": ["Laravel", "LaraKafka"],
     "require": {
         "illuminate/support": "~7|~8",
-        "jobcloud/php-kafka-lib": "~1.0",
+        "jobcloud/php-kafka-lib": "^1.0",
         "spatie/laravel-activitylog": "^3.16"
     },
     "require-dev": {
