@@ -46,7 +46,7 @@ license. Please see the [license file](license.md) for more information.
 [ico-version]: https://img.shields.io/packagist/v/werk365/larakafka.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/werk365/larakafka.svg?style=flat-square
 [ico-travis]: https://img.shields.io/travis/werk365/larakafka/master.svg?style=flat-square
-[ico-styleci]: https://styleci.io/repos/12345678/shield
+[ico-styleci]: https://styleci.io/repos/321376691/shield
 
 [link-packagist]: https://packagist.org/packages/werk365/larakafka
 [link-downloads]: https://packagist.org/packages/werk365/larakafka
