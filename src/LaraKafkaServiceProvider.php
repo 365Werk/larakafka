@@ -9,8 +9,9 @@ use Werk365\LaraKafka\Observers\ActivityLogObserver;
 class LaraKafkaServiceProvider extends ServiceProvider
 {
     protected $commands = [
-        'Werk365\LaraKafka\Commands\LaraKafkaConsume'
+        'Werk365\LaraKafka\Commands\LaraKafkaConsume',
     ];
+
     /**
      * Perform post-registration booting of services.
      *
