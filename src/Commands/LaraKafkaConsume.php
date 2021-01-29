@@ -2,7 +2,6 @@
 
 namespace Werk365\LaraKafka\Commands;
 
-
 use Illuminate\Console\Command;
 use Werk365\LaraKafka\LaraKafka;
 

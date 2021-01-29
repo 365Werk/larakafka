@@ -9,9 +9,11 @@ class ActivityLogObserver
 {
     private $kafka;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->kafka = new LaraKafka();
     }
+
     /**
      * Handle the activity log "created" event.
      *

@@ -2,7 +2,6 @@
 
 namespace Werk365\LaraKafka;
 
-use Illuminate\Support\Facades\Log;
 use Jobcloud\Kafka\Consumer\KafkaConsumerBuilder;
 use Jobcloud\Kafka\Exception\KafkaConsumerConsumeException;
 use Jobcloud\Kafka\Exception\KafkaConsumerEndOfPartitionException;
@@ -11,8 +10,7 @@ use Jobcloud\Kafka\Message\KafkaProducerMessage;
 use Jobcloud\Kafka\Producer\KafkaProducerBuilder;
 
 /**
- * Class LaraKafka
- * @package Werk365\LaraKafka
+ * Class LaraKafka.
  */
 class LaraKafka
 {
@@ -24,11 +22,11 @@ class LaraKafka
 
     public function __construct($body = null)
     {
-        list($childClass, $caller) = debug_backtrace(false, 2);
+        [$childClass, $caller] = debug_backtrace(false, 2);
         $this->body = $body;
-        $this->key = $caller["class"] . "::" . $caller["function"];
+        $this->key = $caller['class'].'::'.$caller['function'];
         $this->topic = config('larakafka.client');
-        $this->headers = array_map(array($this, 'flatten'), $caller);
+        $this->headers = array_map([$this, 'flatten'], $caller);
         $this->broker = config('larakafka.broker');
     }
 
@@ -37,6 +35,7 @@ class LaraKafka
         if (is_array($value)) {
             return json_encode($value);
         }
+
         return $value;
     }
 
@@ -79,9 +78,9 @@ class LaraKafka
         if (RD_KAFKA_RESP_ERR_NO_ERROR !== $result) {
             return 'Was not able to shutdown within 20s. Messages might be lost!';
         }
-        return json_encode(["success" => true]);
-    }
 
+        return json_encode(['success' => true]);
+    }
 
     private function handleMessage($message)
     {
@@ -90,7 +89,7 @@ class LaraKafka
         $body = $message->getBody();
         $function = config("larakafka.consumer.$this->topic.function");
         $namespace = config("larakafka.consumer.$this->topic.namespace");
-        $nf = $namespace . "::" . $function;
+        $nf = $namespace.'::'.$function;
         $nf($key, $headers, $body);
     }
 
