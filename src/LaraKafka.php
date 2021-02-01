@@ -42,30 +42,35 @@ class LaraKafka
     public function setBody(string $body): self
     {
         $this->body = $body;
+
         return $this;
     }
 
     public function setKey(string $key): self
     {
         $this->key = $key;
+
         return $this;
     }
 
     public function setHeaders(array $headers): self
     {
         $this->headers = $headers;
+
         return $this;
     }
 
     public function addHeaders(array $headers): self
     {
         $this->headers = array_merge($this->headers, $headers);
+
         return $this;
     }
 
     public function setTopic(string $topic): self
     {
         $this->topic = $topic;
+
         return $this;
     }
 
@@ -103,18 +108,18 @@ class LaraKafka
         $nf($key, $headers, $body);
     }
 
-    public function storeMessage(object $attributes, array $types):void
+    public function storeMessage(object $attributes, array $types): void
     {
         $config = config('larakafka.maps.consumer');
-        foreach($types as $type){
+        foreach ($types as $type) {
             $mapped_attributes = [];
-            foreach($attributes as $key => $value){
-                if(isset($config[$type]["attributes"][$key])){
-                    $mapped_attributes[$config[$type]["attributes"][$key]] = $value;
+            foreach ($attributes as $key => $value) {
+                if (isset($config[$type]['attributes'][$key])) {
+                    $mapped_attributes[$config[$type]['attributes'][$key]] = $value;
                 }
             }
-            $event_id_name = $config[$type]["event_id"];
-            $config[$type]["model"]::updateOrCreate([$config[$type]["model_id"] => $attributes->$event_id_name], $mapped_attributes);
+            $event_id_name = $config[$type]['event_id'];
+            $config[$type]['model']::updateOrCreate([$config[$type]['model_id'] => $attributes->$event_id_name], $mapped_attributes);
         }
     }
 
