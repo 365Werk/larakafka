@@ -103,11 +103,26 @@ class LaraKafka
         $nf($key, $headers, $body);
     }
 
+    public function storeMessage(object $attributes, array $types):void
+    {
+        $config = config('larakafka.maps.consumer');
+        foreach($types as $type){
+            $mapped_attributes = [];
+            foreach($attributes as $key => $value){
+                if(isset($config[$type]["attributes"][$key])){
+                    $mapped_attributes[$config[$type]["attributes"][$key]] = $value;
+                }
+            }
+            $event_id_name = $config[$type]["event_id"];
+            $config[$type]["model"]::updateOrCreate([$config[$type]["model_id"] => $attributes->$event_id_name], $mapped_attributes);
+        }
+    }
+
     public function consume(string $topic)
     {
         $this->topic = $topic;
         $consumer = KafkaConsumerBuilder::create()
-            ->withAdditionalBroker('pkc-ewzgj.europe-west4.gcp.confluent.cloud:9092')
+            ->withAdditionalBroker($this->broker)
             ->withAdditionalConfig(config('larakafka.configs.consumer'))
             ->withAdditionalSubscription($topic)
             ->build();
