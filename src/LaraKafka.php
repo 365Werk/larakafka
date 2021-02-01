@@ -20,7 +20,7 @@ class LaraKafka
     private $headers;
     private $broker;
 
-    public function __construct($body = null)
+    public function __construct(string $body = null)
     {
         [$childClass, $caller] = debug_backtrace(false, 2);
         $this->body = $body;
@@ -39,27 +39,37 @@ class LaraKafka
         return $value;
     }
 
-    public function setBody($body)
+    public function setBody(string $body): self
     {
         $this->body = $body;
+        return $this;
     }
 
-    public function setKey($key)
+    public function setKey(string $key): self
     {
         $this->key = $key;
+        return $this;
     }
 
-    public function setHeaders($headers)
+    public function setHeaders(array $headers): self
     {
         $this->headers = $headers;
+        return $this;
     }
 
-    public function setTopic($topic)
+    public function addHeaders(array $headers): self
+    {
+        $this->headers = array_merge($this->headers, $headers);
+        return $this;
+    }
+
+    public function setTopic(string $topic): self
     {
         $this->topic = $topic;
+        return $this;
     }
 
-    public function produce()
+    public function produce(): string
     {
         $builder = KafkaProducerBuilder::create();
         $producer = $builder->withAdditionalConfig(config('larakafka.configs.producer'))
@@ -93,7 +103,7 @@ class LaraKafka
         $nf($key, $headers, $body);
     }
 
-    public function consume($topic)
+    public function consume(string $topic)
     {
         $this->topic = $topic;
         $consumer = KafkaConsumerBuilder::create()
