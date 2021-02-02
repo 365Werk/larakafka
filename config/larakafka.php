@@ -10,7 +10,7 @@ return [
                 'security.protocol' => 'SASL_SSL',
                 'sasl.mechanisms' => 'PLAIN',
                 'sasl.username' => '',
-                'sasl.password' => ''
+                'sasl.password' => '',
             ],
             'consumer' => [
                 'client.id' => str_replace(' ', '-', strtolower(env('APP_NAME'))),
@@ -18,8 +18,8 @@ return [
                 'sasl.mechanisms' => 'PLAIN',
                 'sasl.username' => '',
                 'sasl.password' => '',
-                'auto.offset.reset' => 'earliest'
-            ]
+                'auto.offset.reset' => 'earliest',
+            ],
         ],
         'broker' => '',
     ],
@@ -27,8 +27,8 @@ return [
         'consumer' => [
             'example' => [
                 'function' => 'ingest',
-                'namespace' => '\App\Services\KafkaService'
-            ]
+                'namespace' => '\App\Services\KafkaService',
+            ],
         ],
     ],
     'maps' => [
@@ -40,8 +40,8 @@ return [
                 'attributes' => [
                     'uuid' => 'id',
                     'first_name' => 'name',
-                ]
-            ]
-        ]
-    ]
+                ],
+            ],
+        ],
+    ],
 ];
