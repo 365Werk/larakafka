@@ -21,6 +21,7 @@ class LaraKafka
     private $broker;
     private $configs;
     private $functions;
+    private $maps;
 
     public function __construct(string $body = null)
     {
@@ -32,6 +33,7 @@ class LaraKafka
         $this->broker = config('larakafka.client.broker');
         $this->configs = config('larakafka.client.configs');
         $this->functions = config('larakafka.functions');
+        $this->maps = config('larakafka.maps');
     }
 
     private function flatten($value)
@@ -159,7 +161,7 @@ class LaraKafka
 
     public function storeMessage(object $attributes, array $types): void
     {
-        $config = $this->configs['consumer'];
+        $config = $this->maps['consumer'];
         foreach ($types as $type) {
             $mapped_attributes = [];
             foreach ($attributes as $key => $value) {
