@@ -1,8 +1,8 @@
 {
     "name": "werk365/larakafka",
-    "description": "kafka client for laravel",
+    "description": "Kafka client for laravel that can do activitylogging to kafka and easily handle producing and consuming messages",
     "license": "MIT",
-    "version": "1.0.0-beta7",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "Hergen Dillema",

@@ -19,15 +19,19 @@ class LaraKafka
     private $key;
     private $headers;
     private $broker;
+    private $configs;
+    private $functions;
 
     public function __construct(string $body = null)
     {
         [$childClass, $caller] = debug_backtrace(false, 2);
         $this->body = $body;
         $this->key = $caller['class'].'::'.$caller['function'];
-        $this->topic = config('larakafka.client');
+        $this->topic = config('larakafka.client.client_name');
         $this->headers = array_map([$this, 'flatten'], $caller);
-        $this->broker = config('larakafka.broker');
+        $this->broker = config('larakafka.client.broker');
+        $this->configs = config('larakafka.client.configs');
+        $this->functions = config('larakafka.functions');
     }
 
     private function flatten($value)
@@ -37,6 +41,52 @@ class LaraKafka
         }
 
         return $value;
+    }
+
+
+    public function addFunction(string $topic, string $function, string $namespace, string $type = "consumer"): self
+    {
+        $this->functions[$type][$topic] = [
+            "function" => $function,
+            "namespace" => $namespace
+        ];
+
+        return $this;
+    }
+
+    public function setBroker(string $broker): self
+    {
+        $this->broker = $broker;
+
+        return $this;
+    }
+
+    public function setProducerConfig(array $config): self
+    {
+        $this->configs["producer"] = $config;
+
+        return $this;
+    }
+
+    public function setConsumerConfig(array $config): self
+    {
+        $this->configs["consumer"] = $config;
+
+        return $this;
+    }
+
+    public function addProducerConfig(string $key, string $value): self
+    {
+        $this->configs["producer"][$key] = $value;
+
+        return $this;
+    }
+
+    public function addConsumerConfig(string $key, string $value): self
+    {
+        $this->configs["consumer"][$key] = $value;
+
+        return $this;
     }
 
     public function setBody(string $body): self
@@ -77,7 +127,7 @@ class LaraKafka
     public function produce(): string
     {
         $builder = KafkaProducerBuilder::create();
-        $producer = $builder->withAdditionalConfig(config('larakafka.configs.producer'))
+        $producer = $builder->withAdditionalConfig($this->configs["producer"])
             ->withAdditionalBroker($this->broker)
             ->build();
 
@@ -102,15 +152,15 @@ class LaraKafka
         $key = $message->getKey() ?? null;
         $headers = $message->getHeaders() ?? null;
         $body = $message->getBody();
-        $function = config("larakafka.consumer.$this->topic.function");
-        $namespace = config("larakafka.consumer.$this->topic.namespace");
+        $function = $this->functions["consumer"][$this->topic]["function"];
+        $namespace = $this->functions["consumer"][$this->topic]["namespace"];
         $nf = $namespace.'::'.$function;
         $nf($key, $headers, $body);
     }
 
     public function storeMessage(object $attributes, array $types): void
     {
-        $config = config('larakafka.maps.consumer');
+        $config = $this->configs["consumer"];
         foreach ($types as $type) {
             $mapped_attributes = [];
             foreach ($attributes as $key => $value) {
@@ -128,7 +178,7 @@ class LaraKafka
         $this->topic = $topic;
         $consumer = KafkaConsumerBuilder::create()
             ->withAdditionalBroker($this->broker)
-            ->withAdditionalConfig(config('larakafka.configs.consumer'))
+            ->withAdditionalConfig($this->configs["consumer"])
             ->withAdditionalSubscription($topic)
             ->build();
 
