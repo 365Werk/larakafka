@@ -43,12 +43,11 @@ class LaraKafka
         return $value;
     }
 
-
-    public function addFunction(string $topic, string $function, string $namespace, string $type = "consumer"): self
+    public function addFunction(string $topic, string $function, string $namespace, string $type = 'consumer'): self
     {
         $this->functions[$type][$topic] = [
-            "function" => $function,
-            "namespace" => $namespace
+            'function' => $function,
+            'namespace' => $namespace,
         ];
 
         return $this;
@@ -63,28 +62,28 @@ class LaraKafka
 
     public function setProducerConfig(array $config): self
     {
-        $this->configs["producer"] = $config;
+        $this->configs['producer'] = $config;
 
         return $this;
     }
 
     public function setConsumerConfig(array $config): self
     {
-        $this->configs["consumer"] = $config;
+        $this->configs['consumer'] = $config;
 
         return $this;
     }
 
     public function addProducerConfig(string $key, string $value): self
     {
-        $this->configs["producer"][$key] = $value;
+        $this->configs['producer'][$key] = $value;
 
         return $this;
     }
 
     public function addConsumerConfig(string $key, string $value): self
     {
-        $this->configs["consumer"][$key] = $value;
+        $this->configs['consumer'][$key] = $value;
 
         return $this;
     }
@@ -127,7 +126,7 @@ class LaraKafka
     public function produce(): string
     {
         $builder = KafkaProducerBuilder::create();
-        $producer = $builder->withAdditionalConfig($this->configs["producer"])
+        $producer = $builder->withAdditionalConfig($this->configs['producer'])
             ->withAdditionalBroker($this->broker)
             ->build();
 
@@ -152,15 +151,15 @@ class LaraKafka
         $key = $message->getKey() ?? null;
         $headers = $message->getHeaders() ?? null;
         $body = $message->getBody();
-        $function = $this->functions["consumer"][$this->topic]["function"];
-        $namespace = $this->functions["consumer"][$this->topic]["namespace"];
+        $function = $this->functions['consumer'][$this->topic]['function'];
+        $namespace = $this->functions['consumer'][$this->topic]['namespace'];
         $nf = $namespace.'::'.$function;
         $nf($key, $headers, $body);
     }
 
     public function storeMessage(object $attributes, array $types): void
     {
-        $config = $this->configs["consumer"];
+        $config = $this->configs['consumer'];
         foreach ($types as $type) {
             $mapped_attributes = [];
             foreach ($attributes as $key => $value) {
@@ -178,7 +177,7 @@ class LaraKafka
         $this->topic = $topic;
         $consumer = KafkaConsumerBuilder::create()
             ->withAdditionalBroker($this->broker)
-            ->withAdditionalConfig($this->configs["consumer"])
+            ->withAdditionalConfig($this->configs['consumer'])
             ->withAdditionalSubscription($topic)
             ->build();
 
