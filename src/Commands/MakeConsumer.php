@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Werk365\LaraKafka\Commands;
-
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -65,6 +63,7 @@ class MakeConsumer extends GeneratorCommand
                 ! $this->option('force')) &&
             $this->alreadyExists($this->getNameInput())) {
             $this->error($this->type.' already exists!');
+
             return false;
         }
 
@@ -86,7 +85,7 @@ class MakeConsumer extends GeneratorCommand
      */
     protected function getNameInput()
     {
-        return ucfirst(strtolower(trim($this->argument('topic')))) . 'Consumer';
+        return ucfirst(strtolower(trim($this->argument('topic')))).'Consumer';
     }
 
     /**
@@ -151,5 +150,4 @@ class MakeConsumer extends GeneratorCommand
 
         return $this;
     }
-
 }
