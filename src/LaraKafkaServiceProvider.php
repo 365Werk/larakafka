@@ -10,6 +10,7 @@ class LaraKafkaServiceProvider extends ServiceProvider
 {
     protected $commands = [
         'Werk365\LaraKafka\Commands\LaraKafkaConsume',
+        'Werk365\LaraKafka\Commands\MakeConsumer',
     ];
 
     /**
@@ -20,10 +21,6 @@ class LaraKafkaServiceProvider extends ServiceProvider
     public function boot(): void
     {
         ActivityLog::observe(ActivityLogObserver::class);
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'werk365');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'werk365');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -48,16 +45,6 @@ class LaraKafkaServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['larakafka'];
-    }
-
-    /**
      * Console-specific booting.
      *
      * @return void
@@ -68,23 +55,5 @@ class LaraKafkaServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/larakafka.php' => config_path('larakafka.php'),
         ], 'larakafka.config');
-
-        // Publishing the views.
-        /*$this->publishes([
-            __DIR__.'/../resources/views' => base_path('resources/views/vendor/werk365'),
-        ], 'larakafka.views');*/
-
-        // Publishing assets.
-        /*$this->publishes([
-            __DIR__.'/../resources/assets' => public_path('vendor/werk365'),
-        ], 'larakafka.views');*/
-
-        // Publishing the translation files.
-        /*$this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/werk365'),
-        ], 'larakafka.views');*/
-
-        // Registering package commands.
-        // $this->commands([]);
     }
 }

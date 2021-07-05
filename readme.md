@@ -132,8 +132,31 @@ __Other available methods:__
 
 `->addHeaders([])` Merges added headers array in to set one
 
+### Octane Consumer
+To run a consumer when using Laravel Octane, you can choose to either have it run through a Swoole worker or normally though a php process using the console command described in the next step. To use the Octane version, first make a new consumer using:
+```bash
+$ php artisan kafka:consumer topic
+```
 
-### Consumer
+This will create a new consumer class in the `App\Consumers` namespace. For example: `App\Consumers\TestConsumer` when using `test` as the topic name.
+
+In this consumer you will find a `handleMessage()` method which has everything you will need to start processing your messages. To make sure this consumer is started with your octane application, add the consumer to the listeners in the octane config file. I recommend adding it as a listener for the `TickReceived` event like so: 
+```php 
+ 'listeners' => [
+       // ...
+
+        TickReceived::class => [
+            ...Octane::prepareApplicationForNextOperation(),
+            \App\Consumers\TestConsumer::class
+        ],
+
+        // ...
+    ],
+```
+The consumer will only be started once and keep running, but putting it here will mean it will be started every octane-tick (every second), so the consumer can ensure it is still running. If the initial consumer has given no sign of live for `60` seconds, a new consumer will be started.
+
+
+### Console Consumer
 To run a consumer, you can simply run
 ```bash
 $ php artisan larakafka:consume {topic}

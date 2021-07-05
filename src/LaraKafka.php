@@ -200,4 +200,32 @@ class LaraKafka
             }
         }
     }
+
+    public function octaneConsumer(string $topic, $messageCallback, $noMessageCallback)
+    {
+        $this->topic = $topic;
+        $consumer = KafkaConsumerBuilder::create()
+            ->withAdditionalBroker($this->broker)
+            ->withAdditionalConfig($this->configs['consumer'])
+            ->withAdditionalSubscription($topic)
+            ->build();
+
+        $consumer->subscribe();
+        while (true) {
+            try {
+                $message = $consumer->consume();
+                if ($message) {
+                    $messageCallback($message);
+                }
+                $noMessageCallback();
+                $consumer->commit($message);
+            } catch (KafkaConsumerTimeoutException $e) {
+                //no messages were read in a given time
+            } catch (KafkaConsumerEndOfPartitionException $e) {
+                //only occurs if enable.partition.eof is true (default: false)
+            } catch (KafkaConsumerConsumeException $e) {
+                // Failed
+            }
+        }
+    }
 }
