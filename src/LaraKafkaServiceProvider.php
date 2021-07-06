@@ -3,8 +3,6 @@
 namespace Werk365\LaraKafka;
 
 use Illuminate\Support\ServiceProvider;
-use Spatie\Activitylog\Models\Activity as ActivityLog;
-use Werk365\LaraKafka\Observers\ActivityLogObserver;
 
 class LaraKafkaServiceProvider extends ServiceProvider
 {
@@ -20,8 +18,6 @@ class LaraKafkaServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        ActivityLog::observe(ActivityLogObserver::class);
-
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
             $this->bootForConsole();

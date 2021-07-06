@@ -6,7 +6,7 @@
 
 Kafka client package for use in Laravel. Based on [jobcloud/php-kafka-lib](https://github.com/jobcloud/php-kafka-lib).
 
-This package requires [spatie/laravel-activitylog](https://github.com/spatie/laravel-activitylog) to support Kafka based activity logging.
+This package supports an extension to produce spatie activitylog activity automatically. Use `werk365/larakafka-activity`.
 
 Without much configuration (simply making sure the config has the required broker information and credentials), you'll be able to enable the Spatie Activity Logging on a model, and this package will take care of also sending that information to a kafka topic corresponding with your application name.
 
@@ -104,13 +104,7 @@ Lastly, this is the configuration for the `storeMessage()` function. This functi
 `attributes` = The attributes that should be stored for this model. Not all attributes configured here have to be present in the consumed message, as only updates attributes could be sent. The `key` represents the attribute key name as it is in the event, the `value` represents the key as it is called in the model. 
 
 ## Usage
-
-### 1) Produce Through Activity Logging
-Simply enable activity logging on your models according to the [documentation](https://spatie.be/docs/laravel-activitylog/v3/advanced-usage/logging-model-events).
-
-This will enable automatic activity logging to a topic corresponding to your application name.
-
-### 2) Produce Manually
+### Produce 
 ```php
 use Werk365\LaraKafka\LaraKafka;
 

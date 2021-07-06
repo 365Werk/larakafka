@@ -28,7 +28,6 @@ abstract class BaseConsumer implements ConsumerInterface
     /**
      * Handle the event.
      *
-     * @param mixed $event
      * @return void
      */
     public function handle(): void
