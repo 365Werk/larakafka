@@ -33,7 +33,7 @@
     "extra": {
         "laravel": {
             "providers": [
-              "LaraKafkaActivityServiceProvider"
+              "LaraKafkaServiceProvider"
             ],
             "aliases": {
                 "LaraKafka": "Werk365\\LaraKafka\\Facades\\LaraKafka"
