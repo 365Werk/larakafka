@@ -186,7 +186,6 @@ class LaraKafka
             ->withAdditionalSubscription($topic)
             ->build();
 
-
         $consumer->subscribe();
         while (true) {
             try {
@@ -216,7 +215,6 @@ class LaraKafka
             ->withAdditionalConfig($config)
             ->withAdditionalSubscription($topic)
             ->build();
-
 
         $consumer->subscribe();
         while (true) {
