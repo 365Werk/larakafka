@@ -178,7 +178,7 @@ class LaraKafka
     {
         $this->topic = $topic;
         $consumer = KafkaConsumerBuilder::create()
-            ->withConsumerGroup($this->configs['consumer']['client.id'] ?? 'default')
+            ->withConsumerGroup(($this->configs['consumer']['client.id'] ?? 'default').'-'.$topic)
             ->withAdditionalBroker($this->broker)
             ->withAdditionalConfig($this->configs['consumer'])
             ->withAdditionalSubscription($topic)
@@ -206,7 +206,7 @@ class LaraKafka
     {
         $this->topic = $topic;
         $consumer = KafkaConsumerBuilder::create()
-            ->withConsumerGroup($this->configs['consumer']['client.id'] ?? 'default')
+            ->withConsumerGroup(($this->configs['consumer']['client.id'] ?? 'default').'-'.$topic)
             ->withAdditionalBroker($this->broker)
             ->withAdditionalConfig($this->configs['consumer'])
             ->withAdditionalSubscription($topic)
