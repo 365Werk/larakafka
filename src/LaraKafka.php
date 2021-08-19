@@ -177,12 +177,15 @@ class LaraKafka
     public function consume(string $topic)
     {
         $this->topic = $topic;
+        $config = $this->configs['consumer'];
+        $config['client.id'] = ($config['consumer']['client.id'] ?? 'default').'-'.$topic;
         $consumer = KafkaConsumerBuilder::create()
-            ->withConsumerGroup(($this->configs['consumer']['client.id'] ?? 'default').'-'.$topic)
+            ->withConsumerGroup($config['client.id'])
             ->withAdditionalBroker($this->broker)
-            ->withAdditionalConfig($this->configs['consumer'])
+            ->withAdditionalConfig($config)
             ->withAdditionalSubscription($topic)
             ->build();
+
 
         $consumer->subscribe();
         while (true) {
@@ -205,12 +208,15 @@ class LaraKafka
     public function octaneConsumer(string $topic, $messageCallback, $noMessageCallback)
     {
         $this->topic = $topic;
+        $config = $this->configs['consumer'];
+        $config['client.id'] = ($config['consumer']['client.id'] ?? 'default').'-'.$topic;
         $consumer = KafkaConsumerBuilder::create()
-            ->withConsumerGroup(($this->configs['consumer']['client.id'] ?? 'default').'-'.$topic)
+            ->withConsumerGroup($config['client.id'])
             ->withAdditionalBroker($this->broker)
-            ->withAdditionalConfig($this->configs['consumer'])
+            ->withAdditionalConfig($config)
             ->withAdditionalSubscription($topic)
             ->build();
+
 
         $consumer->subscribe();
         while (true) {
